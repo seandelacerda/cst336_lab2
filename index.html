@@ -45,10 +45,47 @@
         <div id="q5Feedback"></div>
         <br/>
         
+        <h3><span id="markImg6"></span> When is US Independence Day?</h3>
+        <input type="date" id="q6"/>
+        <div id="q6Feedback"></div>
+        <br/>
+        
+        <h3><span id="markImg7"></span> Which is the largest US State in terms of area?</h3>
+        <input type="text" id="q7"/>
+        <br/><br/>
+        <div id="q7Feedback"></div>
+        <br/>
+        
+        <h3><span id="markImg8"></span> Which state used to be its own country?</h3>
+        <select id="q8">
+            <option value="">Select One</option>
+            <option value="ca">California</option>
+            <option value="ny">New York</option>
+            <option value="tx">Texas</option>
+            <option value="nm">New Mexico</option>
+        </select>
+        <br/><br/>
+        <div id="q8Feedback"></div>
+        <br/>
+        
+        <h3><span id="markImg9"></span> What were the last two states admitted to the Union?</h3>
+        <input type="checkbox" id="California"/> <label for="California">California</label>
+        <input type="checkbox" id="Oregon"/> <label for="Oregon">Oregon</label>
+        <input type="checkbox" id="Alaska"/> <label for="Alaska">Alaska</label>
+        <input type="checkbox" id="Hawaii"/> <label for="Hawaii">Hawaii</label>
+        <br/><br/>
+        <div id="q9Feedback"></div>
+        <br/>
+        
+        <h3><span id="markImg10"></span> Which state contains the largest US city?</h3>
+        <div id="q10Choices"></div>
+        <div id="q10Feedback"></div>
+        <br/>
+        
         <h3 id="validationFdbk" class="bg-danger text-white"></h3>
         <button class="btn btn-outline-success">Submit Quiz</button>
         <br/>
-        <h2 id="totalScore" class="text-info"></h2>
+        <h2 id="totalScore"></h2>
         
         <h3 id="totalAttempts"></h3>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -69,6 +106,7 @@
                 });
                 
                 displayQ4Choices();
+                displayQ10Choices();
                 
                 function displayQ4Choices() {
                     let q4ChoicesArray = ["Maine", "Rhode Island", "Maryland", "Delaware"];
@@ -76,6 +114,15 @@
                     
                     for (let i = 0; i < q4ChoicesArray.length; i++) {
                         $("#q4Choices").append(` <input type="radio" name="q4" id="${q4ChoicesArray[i]}" value="${q4ChoicesArray[i]}"/> <label for="${q4ChoicesArray[i]}"> ${q4ChoicesArray[i]}</label>`)
+                    }
+                }
+                
+                function displayQ10Choices() {
+                    let q10ChoicesArray = ["New York", "California", "Illinois", "Texas"];
+                    q10ChoicesArray = _.shuffle(q10ChoicesArray);
+                    
+                    for (let i = 0; i < q10ChoicesArray.length; i++) {
+                        $("#q10Choices").append(` <input type="radio" name="q10" id="${q10ChoicesArray[i]}" value="${q10ChoicesArray[i]}"/> <label for="${q10ChoicesArray[i]}"> ${q10ChoicesArray[i]}</label>`)
                     }
                 }
                 
@@ -93,7 +140,7 @@
                     $(`#q${index}Feedback`).html("Correct!");
                     $(`#q${index}Feedback`).attr("class", "bg-success text-white");
                     $(`#markImg${index}`).html("<img src='img/checkmark.png' alt='checkmark'>");
-                    score += 20;
+                    score += 10;
                 }
                 
                 function wrongAnswer(index) {
@@ -114,6 +161,12 @@
                     let q1Response = $("#q1").val().toLowerCase();
                     let q2Response = $("#q2").val();
                     let q4Response = $("input[name=q4]:checked").val();
+                    let q6Response = $("#q6").val();
+                    let q7Response = $("#q7").val().toLowerCase();
+                    let q8Response = $("#q8").val();
+                    let q10Response = $("input[name=q10]:checked").val();
+                    
+                    console.log(q6Response);
                     
                     //Question 1
                     if (q1Response == "sacramento") {
@@ -150,6 +203,43 @@
                         wrongAnswer(5);
                     }
                     
+                     //Question 6
+                    if (q6Response == '1776-07-04') {
+                        rightAnswer(6);
+                    } else {
+                        wrongAnswer(6);
+                    }
+                    
+                    
+                     //Question 7
+                    if (q7Response == "alaska") {
+                        rightAnswer(7);
+                    } else {
+                       wrongAnswer(7);
+                    }
+                    
+                     //Question 8
+                    if (q8Response == "tx") {
+                       rightAnswer(8);
+                    } else {
+                       wrongAnswer(8);
+                    }
+                    
+                     //Question 9
+                    if ($("#Alaska").is(":checked") && $("#Hawaii").is(":checked") && !$("#Oregon").is(":checked") && !$("#California").is(":checked")) {
+                        rightAnswer(9);
+                    } else {
+                        wrongAnswer(9);
+                    }
+                    
+                     //Question 10
+                    if (q10Response == "New York") {
+                       rightAnswer(10);
+                    } else {
+                       wrongAnswer(10);
+                    }
+                    
+                    
                     $("#totalScore").html(`Total Score: ${score}`);
                     if (score < 80) {
                         $("#totalScore").css("color", "rgb(255, 0, 0");
@@ -159,8 +249,6 @@
                     
                     $("#totalAttempts").html(`Total Attempts: ${++attempts}`);
                     localStorage.setItem("total_attempts", attempts);
-                    
-                    
                 }
             })//ready
         </script>
